@@ -74,10 +74,95 @@
 
 ## 2. Changelog 更新
 
-### 文件位置
+### 格式选择
+
+**新格式(推荐)** - 按日期分割:
+```
+changelog/
+├── YYYY-MM.md                 # 月份索引
+└── YYYY-MM/                   # 月份文件夹
+    ├── YYYY-MM-01.md          # 每日日志
+    ├── YYYY-MM-02.md
+    └── ...
+```
+
+**旧格式(兼容)** - 月度聚合:
+```
+changelog/
+└── YYYY-MM.md                 # 整月日志在一个文件
+```
+
+**自动检测**: 优先使用新格式,若 `changelog/YYYY-MM/` 目录不存在则使用旧格式
+
+---
+
+### 新格式 - 按日期分割
+
+#### 文件位置
+- **日志文件**: `$ARCHIVE_PATH/changelog/YYYY-MM/YYYY-MM-DD.md`
+- **月份索引**: `$ARCHIVE_PATH/changelog/YYYY-MM.md`
+
+#### 日期文件不存在时
+创建新文件：
+
+```markdown
+# YYYY年MM月DD日变更记录
+
+---
+
+### HH:mm
+- **任务**：[任务描述]
+- **变更文件**：
+  - `src/views/Login.vue:45-60`
+  - `src/styles/login.scss:12`
+- **类型**：修改
+- **说明**：[可选的补充说明]
+```
+
+#### 日期文件已存在时
+追加新记录到文件末尾：
+
+```markdown
+### HH:mm
+- **任务**：修改登录页样式为深色主题
+- **变更文件**：
+  - `src/views/Login.vue:15-30`
+  - `src/styles/login.scss:8-25`
+- **类型**：修改
+- **说明**：响应用户深色模式偏好
+
+---
+
+### HH:mm
+（后续记录...）
+```
+
+#### 月份索引更新
+当创建新的日期文件时,更新月份索引 `changelog/YYYY-MM.md`：
+
+```markdown
+# YYYY年MM月变更索引
+
+> 本月共 N 次变更
+
+## 日期列表
+- [YYYY-MM-DD](./YYYY-MM/YYYY-MM-DD.md) - 3次变更
+- [YYYY-MM-DD](./YYYY-MM/YYYY-MM-DD.md) - 5次变更
+- ...
+
+## 快速统计
+- **变更类型**: 修改 12次, 新增 5次, 修复 3次
+- **高频文件**: `src/views/Login.vue` (8次)
+```
+
+---
+
+### 旧格式 - 月度聚合
+
+#### 文件位置
 `$ARCHIVE_PATH/changelog/YYYY-MM.md`
 
-### 月度文件不存在时
+#### 月度文件不存在时
 创建新文件：
 
 ```markdown
@@ -94,7 +179,7 @@
 - **说明**：[可选的补充说明]
 ```
 
-### 月度文件已存在时
+#### 月度文件已存在时
 追加新记录到文件开头（最新记录在最上方）：
 
 ```markdown
