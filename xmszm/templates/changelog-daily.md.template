@@ -1,0 +1,11 @@
+# $YEAR年$MONTH月$DAY日变更记录
+
+---
+
+### $TIME
+- **任务**：$TASK_DESCRIPTION
+- **变更文件**：
+  - $FILE_1
+  - $FILE_2
+- **类型**：$CHANGE_TYPE
+- **说明**：$OPTIONAL_NOTE
