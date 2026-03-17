@@ -1,6 +1,6 @@
 # 变量定义说明
 
-> 本文档定义了 xmszm-code-workflow skill 中使用的所有变量及其含义
+> 本文档定义了 xmszm skill 中使用的所有变量及其含义
 
 ## 📋 目录
 

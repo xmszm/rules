@@ -1,11 +1,11 @@
 ---
-name: xmszm-log
+name: xmszm
 description: 快速记录代码变更日志到changelog,支持查询历史记录。无需走完整workflow,适合小改动的快速记录。
 ---
 
 # xmszm 日志管理工具
 
-> **简称**: log | **全称**: xmszm-log
+> **简称**: xmszm | **全称**: xmszm
 
 ## 📚 规则加载机制
 
@@ -52,8 +52,8 @@ description: 快速记录代码变更日志到changelog,支持查询历史记录
 **执行概要**：
 1. 项目定位（定位 `$PROJECT_ROOT` 和 `$ARCHIVE_PATH`）
 2. 变更信息收集：
-   - 自动检测：`git diff --name-only HEAD`
-   - 手动输入：解析用户描述
+   - 手动输入：解析用户描述（默认）
+   - 自动检测：`git diff --name-only HEAD`（Git 可用时可选）
 3. 格式检测：
    - 检查 `changelog/YYYY-MM/` 目录 → 新格式
    - 检查 `changelog/YYYY-MM.md` 文件 → 旧格式
@@ -61,14 +61,13 @@ description: 快速记录代码变更日志到changelog,支持查询历史记录
 4. 写入日志：
    - 新格式：`changelog/YYYY-MM/YYYY-MM-DD.md`（追加到末尾）
    - 旧格式：`changelog/YYYY-MM.md`（插入到开头）
-5. 可选：更新功能归档（`pages/` 或 `guides/`）
-6. 多项目环境：更新根索引 `.xmszm/projects.md`
+5. 若有归档目录：可选更新功能归档（`pages/` 或 `guides/`）
+6. 若无归档目录：输出结构化日志摘要（不阻断）
 
 **输出示例**：
 ```
-✓ 已记录到: project-a/.xmszm/changelog/2026-01/2026-01-07.md
-✓ 已更新功能归档: pages/login.md
-✓ 已更新根索引
+✓ 已输出结构化日志摘要
+✓ 有归档目录时已落盘到 changelog
 ```
 
 ---
@@ -167,6 +166,18 @@ description: 快速记录代码变更日志到changelog,支持查询历史记录
 → 生成本月的变更统计(类型分布、文件热度等)
 ```
 
+### 场景 4: 无 Git 环境快速记录
+```
+用户: "记录一下，改了筛选栏交互"
+→ 直接使用手动模式记录，不依赖 git diff
+```
+
+### 场景 5: 多人并发同日记录
+```
+用户A/用户B 同时记录当天变更
+→ 统一追加写入；若冲突，按 Git 流程人工合并
+```
+
 ---
 
 ## 核心命令
@@ -178,16 +189,16 @@ description: 快速记录代码变更日志到changelog,支持查询历史记录
 **执行流程**:
 1. 检测项目环境(读取 `rules/project-detection.md`)
 2. 获取变更信息:
-   - 自动检测: 运行 `git diff --name-only` 获取变更文件
-   - 手动指定: 用户直接说明文件和改动
+   - 手动指定: 用户直接说明文件和改动（默认）
+   - 自动检测: 运行 `git diff --name-only` 获取变更文件（可选）
 3. 记录到changelog:
    - 新格式: `changelog/YYYY-MM/YYYY-MM-DD.md`
    - 旧格式: `changelog/YYYY-MM.md`
-4. 可选: 更新功能归档文件
+4. 可选: 更新功能归档文件（仅归档目录存在时）
 
 **输入参数**:
 - `--message`: 变更描述(必需)
-- `--files`: 变更文件列表(可选,自动检测 git diff)
+- `--files`: 变更文件列表(可选,无Git时建议提供)
 - `--type`: 变更类型(可选,默认"修改")
 - `--skip-archive`: 跳过功能归档更新
 
